@@ -8,10 +8,10 @@ public class SyncMethod {
 
         /**
          * Synchronized 메서드는 한번에 한 쓰레드만 접근 가능
+         * Method 내부 로직 전체가 Synchronized Block으로 감싸진것으로 생각하면 편하다.
          * @param value
          */
         public synchronized void setValue(int value) {
-            System.out.println("ShareThread.setValue");
             this.value = value;
             try {
                 Thread.sleep(5000);
@@ -24,13 +24,14 @@ public class SyncMethod {
 
         /**
          * Synchronized 메서드를 호출한 Thread끼리는 다른 메서드라도 Sync하게 움직이게됨.
-         * Synchronized 메서드는 내부적으로 synchronized block(class)로 감싸져있다고 볼 수 있을듯. 고로 같은 클래스를 대상으로 접근하는 여러 메소드들이 sync하게 작동하는것.
+         * Synchronized 메서드는 내부적으로 synchronized block(class)로 감싸져있다고 볼 수 있을듯.
+         * 고로 같은 클래스를 대상으로 접근하는 여러 메소드들이 sync하게 작동하는것.
          * @param value2
          */
         public synchronized void setValue2(int value2) {
             this.value2 = value2;
             try {
-//                Thread.sleep(3000);
+                Thread.sleep(3000);
             } catch (Exception e) {
                 e.printStackTrace();
             }

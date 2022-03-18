@@ -14,19 +14,35 @@ public class SyncMethodWait {
             System.out.println("ShareThread.setValue");
             this.value = value;
             try {
-                Thread.sleep(5000);
+                Thread.sleep(2000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            System.out.println("now notify");
+            notify();
+            try {
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             System.out.println(Thread.currentThread().getName() + "의 Value 값은 " + this.value + "입니다.");
 
         }
 
 
         public synchronized void setValue2(int value2) {
+            System.out.println("ShareThread.setValue2");
             this.value2 = value2;
             try {
-                Thread.sleep(3000);
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("now notify");
+            notify();
+            try {
+                Thread.sleep(2000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -48,12 +64,6 @@ public class SyncMethodWait {
         });
 
         Thread thred2 = new Thread(() -> {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-//            shareTread.setValue(10);
             shareTread.setValue2(10);
         });
         thred1.setName("스레드 1");
@@ -61,13 +71,9 @@ public class SyncMethodWait {
         thred1.start();
         thred2.start();
 
-        //특정 쓰레드가 끝나길 기다림.
-        synchronized (thred1){
-            thred1.wait();
-        }
-
-        synchronized (thred2){
-            thred2.wait();
+        //특정 객체의 락이 풀리길 기다림.
+        synchronized (shareTread){
+            shareTread.wait();
         }
 
         System.out.println("End");
