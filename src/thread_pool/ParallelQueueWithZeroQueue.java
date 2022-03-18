@@ -31,9 +31,11 @@ public class ParallelQueueWithZeroQueue {
 
         List<Boolean> resultGet = new ArrayList<>();
 
-        results.forEach(result -> {
+        results.parallelStream().forEach(result -> {
             try {
+                System.out.println("그냥 forEach는 병렬처리 안된다 parallelStream으로 생성해야 병렬처리된다");
                 resultGet.add(result.get());
+                Thread.sleep(100);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }

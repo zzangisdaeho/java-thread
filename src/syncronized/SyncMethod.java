@@ -53,12 +53,6 @@ public class SyncMethod {
         });
 
         Thread thred2 = new Thread(() -> {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-//            shareTread.setValue(10);
             shareTread.setValue2(10);
         });
         thred1.setName("스레드 1");

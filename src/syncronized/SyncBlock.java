@@ -16,7 +16,7 @@ public class SyncBlock {
             synchronized (this) {
                 this.value = value;
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -38,7 +38,7 @@ public class SyncBlock {
             synchronized (this) {
                 this.value2 = value2;
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(1000);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -51,7 +51,7 @@ public class SyncBlock {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         ShareThread shareTread = new ShareThread();
         Thread thred1 = new Thread(() -> {
@@ -66,6 +66,10 @@ public class SyncBlock {
         thred1.start();
         thred2.start();
 
-        System.out.println("SyncBlock.main");
+        //join 호출시 해당 쓰레드가 끝날때까지 waiting한다
+        thred1.join();
+        thred2.join();
+
+        System.out.println("end");
     }
 }
