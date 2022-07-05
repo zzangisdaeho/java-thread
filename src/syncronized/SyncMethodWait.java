@@ -7,7 +7,7 @@ public class SyncMethodWait {
         private int value2 = 0;
 
         /**
-         * Synchronized 메서드는 끝나면 자신을 wait하는 객체에 자동으로 notify해준다.
+         * Synchronized 메서드는 끝나면(sync block을 벗어나면) 자신을 wait하는 객체에 자동으로 notify해준다.
          * @param value
          */
         public synchronized void setValue(int value) {
