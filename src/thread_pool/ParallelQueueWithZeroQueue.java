@@ -17,7 +17,7 @@ public class ParallelQueueWithZeroQueue {
         Callable<Boolean> task = () ->{
             Boolean isFinish = true;
 
-//            Thread.sleep(1000);
+            Thread.sleep(1000);
             System.out.println("작업 중입니다. Call" + Thread.currentThread().getName());
 
             return isFinish;
@@ -35,7 +35,7 @@ public class ParallelQueueWithZeroQueue {
             try {
                 System.out.println("그냥 forEach는 병렬처리 안된다 parallelStream으로 생성해야 병렬처리된다");
                 resultGet.add(result.get());
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }

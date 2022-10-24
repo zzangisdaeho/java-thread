@@ -16,7 +16,7 @@ public class CountDownLatchTest {
 
         System.out.println("Start multi threads (tid: " + Thread.currentThread().getId() + ")");
 
-        workers.forEach(Thread::start);
+        workers.parallelStream().forEach(Thread::start);
 
         System.out.println("Waiting for some work to be finished (tid: " + Thread.currentThread().getId() + ")");
 

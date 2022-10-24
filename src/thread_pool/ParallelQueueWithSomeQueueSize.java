@@ -36,7 +36,7 @@ public class ParallelQueueWithSomeQueueSize {
             try {
                 System.out.println("forEach는 병렬처리 안된다");
                 resultGet.add(result.get());
-                Thread.sleep(100);
+                Thread.sleep(3000);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
