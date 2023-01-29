@@ -1,14 +1,10 @@
 package completable_future;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 public class CompletableFutureTest {
@@ -43,7 +39,6 @@ public class CompletableFutureTest {
 
         return CompletableFuture.supplyAsync(() -> {
             threadSleep(100);
-//            System.out.println("thread = " + Thread.currentThread().getName());
             if(seq % 10 == 0) throw new IllegalArgumentException("10의 배수는 통과할수 없다. 들어온 값 : " + seq);
             return seq*2;
         }, executorService);
