@@ -7,8 +7,12 @@ import java.util.stream.IntStream;
 
 public class PointTest {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+
+
         PointTest pointTest = new PointTest();
+
+//        getScheduledExecutorService(pointTest);
 
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 100, TimeUnit.SECONDS, new LinkedBlockingDeque<>());
 
@@ -24,16 +28,33 @@ public class PointTest {
             }
         });
 
+
         System.out.println("=end= ");
+
 
         executor.shutdown();
 
     }
 
+    private static void getScheduledExecutorService(PointTest pointTest) {
+        ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
+
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
+            System.out.println("Wake up!!!" + pointTest);
+            synchronized (pointTest){
+                try {
+                    pointTest.notifyAll();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 5, 10, TimeUnit.SECONDS);
+    }
+
     private static Callable<Object> getObjectCallable(PointTest pointTest) {
         return () -> {
             try {
-                return pointTest.doTrace(3);
+                return pointTest.checkWeight(3);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
@@ -42,16 +63,18 @@ public class PointTest {
 
     private PointManager pointManager = new PointManager(10);
 
-    public synchronized Object doTrace(int weight) throws Throwable {
+    public synchronized Object checkWeight(int weight) throws Throwable {
         while (true) {
-            if (pointManager.addPointAndCheckLimit(weight)){
+            System.out.println("this = " + this);
+            if (pointManager.addPointAndCheckLimit(weight)) {
+                this.notifyAll();
                 pointManager.addNewPoints(weight);
                 return "Success";
+            } else {
+                this.wait(TimeUnit.SECONDS.toMillis(30));
             }
-            else Thread.sleep(TimeUnit.SECONDS.toMillis(30));
         }
     }
-
 
     public static class PointManager {
         private static final long ONE_MINUTE_IN_MILLIS = TimeUnit.MINUTES.toMillis(1);
@@ -68,15 +91,16 @@ public class PointTest {
             long now = System.currentTimeMillis();
             removePointsOlderThanOneMinute(now);
             int newPoints = getRecentPoints(now) + point;
-            points.forEach((key, value) -> System.out.println("key = " + key + " value = " + value));
-            System.out.println("current point : " + newPoints);
-            System.out.println("return value : " + (newPoints < maxPoints));
+//            points.forEach((key, value) -> System.out.println("key = " + key + " value = " + value));
+//            System.out.println("current point : " + newPoints);
+//            System.out.println("return value : " + (newPoints < maxPoints));
             return newPoints < maxPoints;
         }
 
         private void removePointsOlderThanOneMinute(long now) {
             points.keySet().removeIf(timestamp -> now - timestamp > ONE_MINUTE_IN_MILLIS);
         }
+
 
         private int getRecentPoints(long now) {
             return points.entrySet().stream()
@@ -85,10 +109,10 @@ public class PointTest {
                     .sum();
         }
 
-        private void addNewPoints(int point){
+        private void addNewPoints(int point) {
             long now = System.currentTimeMillis();
             points.compute(now, (key, value) -> {
-                if(value == null) return point;
+                if (value == null) return point;
                 else return value + point;
             });
         }
