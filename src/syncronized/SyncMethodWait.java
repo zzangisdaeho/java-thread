@@ -14,7 +14,7 @@ public class SyncMethodWait {
             System.out.println("ShareThread.setValue");
             this.value = value;
             threadSleep(1000);
-            System.out.println("setValue 1 now notify");
+            System.out.println("setValue 1 now notify" + Thread.currentThread());
             notify();
             threadSleep(1000);
 
@@ -27,7 +27,7 @@ public class SyncMethodWait {
             System.out.println("ShareThread.setValue2");
             this.value2 = value2;
             threadSleep(1000);
-            System.out.println("setValue 2 now notify");
+            System.out.println("setValue 2 now notify" + Thread.currentThread());
             notify();
             threadSleep(1000);
             System.out.println(Thread.currentThread().getName() + "의 Value 값은 " + this.value2 + "입니다.");
@@ -53,17 +53,17 @@ public class SyncMethodWait {
 
         ShareThread shareTread = new ShareThread();
         Thread thred1 = new Thread(() -> {
-            threadSleep(10);
+            threadSleep(100);
             shareTread.setValue(100);
 
         });
 
         Thread thred2 = new Thread(() -> {
-            threadSleep(10);
+            threadSleep(100);
             shareTread.setValue2(10);
         });
-        thred1.setName("스레드 1");
-        thred2.setName("스레드 2");
+//        thred1.setName("스레드 1");
+//        thred2.setName("스레드 2");
         thred1.start();
         thred2.start();
 
@@ -79,7 +79,7 @@ public class SyncMethodWait {
         //하지만 이 경우는 다른 쓰레드에서 객체의 락을 잡아놓은상태로 notify하기때문에 같은 객체에 sync를 잡고있는 main thread가 진행할 수 없다.
         //다른 쓰레드의 락이 끝나고 나서야 main thread가 synchronized블럭안에서 실행하며을 빠져나올 수 있다.
         synchronized (shareTread){
-            System.out.println("wait in");
+            System.out.println("wait in" + Thread.currentThread());
             shareTread.wait();
             System.out.println("wait out");
         }
