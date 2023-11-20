@@ -60,6 +60,7 @@ public class SyncBlock {
         });
         Thread thred2 = new Thread(() -> {
             shareTread.setValue2(10);
+
         });
         thred1.setName("스레드 1");
         thred2.setName("스레드 2");

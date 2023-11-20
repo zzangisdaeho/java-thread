@@ -1,7 +1,10 @@
 package syncronized;
 
+import java.util.Queue;
+
 public class SyncBlockWait {
 
+    
     public static class ShareThread {
         private int value = 0;
         private int value2 = 0;
