@@ -68,7 +68,9 @@ public class SyncBlock {
         thred2.start();
 
         //join 호출시 해당 쓰레드가 끝날때까지 waiting한다
+        System.out.println("1번 조인 시작");
         thred1.join();
+        System.out.println("2번 조인 시작");
         thred2.join();
 
         System.out.println("end");
